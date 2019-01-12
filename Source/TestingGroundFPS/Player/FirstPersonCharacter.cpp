@@ -5,6 +5,7 @@
 #include "../Weapons/Gun.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/SkeletalMeshComponent.h"
 #include "Engine/World.h"
 #include "Components/InputComponent.h"
 #include "GameFramework/InputSettings.h"
