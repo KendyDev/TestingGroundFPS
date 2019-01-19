@@ -3,6 +3,8 @@
 #include "Tile.h"
 #include "Engine/World.h"
 #include "DrawDebugHelpers.h"
+#include "ActorPool.h"
+
 
 
 // Sets default values
@@ -61,7 +63,11 @@ void ATile::PlaceActor(TSubclassOf<AActor> ToSpawn, FVector SpawnPoint, float Ro
 void ATile::BeginPlay()
 {
 	Super::BeginPlay();
-	
+}
+
+void ATile::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Pool->ReturnActor(NavMeshBoundsVolume);
 }
 
 // Called every frame
@@ -69,6 +75,13 @@ void ATile::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void ATile::SetPool(UActorPool * InPool)
+{
+	Pool = InPool;
+
+	PositionNavMeshBoundVolume();
 }
 
 
@@ -87,3 +100,13 @@ bool ATile::CanSpawnAtLocation(FVector Location, float Radius)
 	return !HasHit;
 }
 
+void ATile::PositionNavMeshBoundVolume()
+{
+	NavMeshBoundsVolume = Pool->CheckOut();
+	if (NavMeshBoundsVolume == nullptr)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Not enough actors in pool."));
+		return;
+	}
+	NavMeshBoundsVolume->SetActorLocation(GetActorLocation());
+}
