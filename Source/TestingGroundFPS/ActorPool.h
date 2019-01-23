@@ -20,6 +20,6 @@ public:
 	void ReturnActor(AActor* ActorToReturn);
 
 	void Add(AActor* ActorToAdd);
-		
-	
+private :
+	TArray<AActor*> Pool;
 };
